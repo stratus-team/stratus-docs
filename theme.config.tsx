@@ -4,4 +4,5 @@ export default {
     link: "https://github.com/stratus-team/stratus-docs",
   },
   // ... other theme options
+  docsRepositoryBase: "https://github.com/stratus-team/stratus-docs/blob/main",
 };

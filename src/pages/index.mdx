@@ -1,0 +1,30 @@
+# Stratus 
+
+# What is Gr8-Limiter?
+Gr8-Limiter is the easiest way to add a rate limiter to you full stack application.
+Currently, the SDK is only offered for Typescript/Javascript.
+
+# How to use?
+All the code you need: 
+
+`route.ts`
+```typescript
+
+const client = new Client({
+  apiKey: process.env.STRATUS_TOKEN!,
+  // this will be removed soon...
+  apiURL: "https://gr8-limit-docker.onrender.com/api/v1/ratelimit",
+});
+
+export async function POST(req: Next Request){
+// Inside a route method
+  try {
+    const rateLimited = await client.rateLimit();
+    if (rateLimited) {
+      return NextResponse.json(
+        { error: "Rate limited." },
+        { status: 429 }
+      );
+    }
+    // Rest of ur code...
+    ```
