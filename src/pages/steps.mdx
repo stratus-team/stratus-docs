@@ -1,0 +1,81 @@
+import { Callout, FileTree, Steps } from 'nextra/components'
+
+## Setting up your environment
+
+<Steps>
+
+### Install the packages
+
+```bash copy npm2yarn
+npm install uploadthing @stratus-dev/sdk
+```
+
+### Add env variable
+
+```bash
+STRATUS_TOKEN=... # A secret key for your app (UUID) 
+```
+
+<Callout type="warning">
+  If you don't already have a Stratus secret key, [sign up](https://gr8-limiter.vercel.app/sign-up) and create one from
+  the [dashboard !](https://gr8-limiter.vercel.app/dashboard)
+</Callout>
+</Steps>
+
+### Create a Next.js API route 
+<Callout type="info">
+  Works with any [route method.](https://nextjs.org/docs/app/building-your-application/routing/route-handlers)
+</Callout>
+
+<FileTree>
+  <FileTree.Folder name="app" defaultOpen>
+    <FileTree.File name="page.tsx" />
+    <FileTree.File name="layout.tsx" />
+    <FileTree.Folder name="api" defaultOpen>
+      <FileTree.File name="route.ts" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+### Example
+<Callout emoji="💡">
+  If you have better examples...submit a [pull request](https://github.com/stratus-team/stratus-docs/pulls).
+</Callout>
+```ts copy filename="app/api/route.ts"
+import { NextRequest, NextResponse } from "next/server";
+import { Client, StratusError } from "@stratus-dev/sdk";
+
+const client = new Client({
+  // Pretty soon we will clean this all up...
+  apiKey: process.env.STRATUS_TOKEN!,
+  apiURL: "https://gr8-limit-docker.onrender.com/api/v1/ratelimit",
+});
+
+export async function POST(req: NextRequest){
+// Inside a route method
+  try {
+    const rateLimited = await client.rateLimit();
+    if (rateLimited) {
+      return NextResponse.json(
+        { error: "Rate limited." },
+        { status: 429 }
+      );
+    }
+  // Further logic if not rate limited
+  // ...
+
+    return NextResponse.json(
+      { message: "Success" },
+      { status: 200 }
+    );
+
+  }catch(error){
+    if (error instanceof StratusError) {
+      return NextResponse.json({ error: error.cause }, { status: error.code });
+    }
+    return NextResponse.json(
+      { message: error.message || "Error" },
+      { status: 500 }
+    );
+  }
+}
+    ```
