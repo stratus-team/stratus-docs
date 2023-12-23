@@ -1,0 +1,29 @@
+import { Callout} from 'nextra/components'
+
+# OpenAI
+
+<Callout emoji="💡">
+  The OpenAI free tier rate limit [docs](https://platform.openai.com/docs/guides/rate-limits/free-tier-rate-limits)
+</Callout>
+
+**Free Tier Limits**
+| MODEL                  | RPM | RPD | TPM     | TPD     |
+|------------------------|-----|-----|---------|---------|
+| gpt-3.5-turbo          | 3   | 200 | 40,000  |         |
+| text-embedding-ada-002 | 3   | 200 | 150,000 |         |
+| whisper-1              | 3   | 200 |         |         |
+| tts-1                  | 3   | 200 |         |         |
+| dall-e-2               | 5   |     | img/min |         |
+| dall-e-3               | 1   |     | img/min |         |
+ 
+*RPM is the key figure for Stratus at the moment.
+
+Assuming GPT 3.5 Turbo within free tier, you would want to avoid being rate limited
+3 reqs/min should mean your [RateLimitConfigOptions](/apiref#ratelimitoptions) config will be: 
+
+```ts
+const rateLimited = await client.rateLimit({
+  limit: 2,  
+  window: 60,
+});
+```

@@ -1,1 +1,38 @@
- ### TODO: Add Typescript sdk methods
+## rateLimit
+The `rateLimit` function is used to determine whether a request should be rate limited or not. 
+It is easily configured to have a custom rate limit based on the API key. 
+
+### RateLimitConfigOptions
+This is the interface that allows you to configure the rate limit.
+
+
+```ts
+/**
+ * RateLimitConfigOptions interface defines the configuration options for rate limiting.
+ */
+export interface RateLimitConfigOptions {
+  /**
+   * The maximum number of requests allowed within a specified window of time.
+   * Default: 5 requests per second if not specified.
+   */
+  limit?: number;
+
+  /**
+   * The length of the time window in seconds during which the requests are counted.
+   * Default: 1 second if not specified.
+   */
+  window?: number;
+}
+```
+
+### Example
+
+
+```ts
+// 10 requests per second
+const rateLimited = await client.rateLimit({
+  limit: 10,
+  window: 1,
+});
+```
+
