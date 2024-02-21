@@ -14,4 +14,5 @@ export default {
       <meta property="og:description" content="Making dev's lives easier." />
     </>
   ),
+  darkMode: false,
 };
